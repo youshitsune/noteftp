@@ -26,7 +26,7 @@ if __name__ == "__main__":
         with tmp.form("ftp"):
             host = st.text_input("Host")
             user = st.text_input("Username")
-            passwd = st.text_input("Password")
+            passwd = st.text_input("Password", type="password")
     
             if st.form_submit_button("Submit"):
                 st.session_state.clicked = True

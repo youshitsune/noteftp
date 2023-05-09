@@ -11,6 +11,8 @@ def get_files(server):
     server.retrlines("NLST", callback=ctx.append)
     return ctx
 
+files = get_files(FTP(st.session_state.host, user=st.session_state.user, passwd=st.session_state.passwd))
+
 def get_ctx(ftp, path):
     ctx = []
     ftp.retrbinary(f"RETR {path}", ctx.append)
@@ -35,8 +37,16 @@ def save(ftp, path, ctx):
     os.remove("file.txt")
 
 def run(host, user, passwd):
+    global files
     ftp = FTP(host, user=user, passwd=passwd)
-    files = get_files(ftp)
+    with st.sidebar.expander("New file"):
+        new_file = st.text_input("Name of file")
+        if st.button("Create"):
+            files.append(new_file)
+            with open("file.txt", "w") as f:
+                pass
+            ftp.storbinary(f"STOR {new_file}", open("file.txt", "rb"))
+            os.remove("file.txt")
     file = st.sidebar.selectbox("Select a file:", files)
     with tmp.container():
         ctx = st.text_area(f"{file}", value=get_ctx(ftp, file))

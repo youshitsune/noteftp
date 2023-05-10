@@ -6,6 +6,7 @@ if not st.session_state:
     st.session_state.clicked = False
 tmp = st.empty()
 
+
 def get_files(server):
     ctx = []
     server.retrlines("NLST", callback=ctx.append)
@@ -36,6 +37,7 @@ def save(ftp, path, ctx):
     os.remove("file.txt")
 
 def run(host, user, passwd):
+    edit, preview = st.tabs(["Edit", "Preview"])
     ftp = FTP(host, user=user, passwd=passwd)
     files = get_files(ftp)
     with st.sidebar.expander("New file"):
@@ -46,12 +48,13 @@ def run(host, user, passwd):
             ftp.storbinary(f"STOR {new_file}", open("file.txt", "rb"))
             os.remove("file.txt")
     file = st.sidebar.selectbox("Select a file:", files)
-    with tmp.container():
+    with edit:
         ctx = st.text_area(f"{file}", value=get_ctx(ftp, file))
         if st.button("Save"):
             save(ftp, file, ctx)
 
-
+    with preview:
+        st.markdown(ctx)
 if __name__ == "__main__":
     if not st.session_state.clicked:
         with tmp.form("ftp"):

@@ -5,7 +5,7 @@ This is a web app that allows you to connect to your FTP server and edit files o
 
 ## Usage
 
-Visit, the web app [here](https://youshitsune-noteftp-main-58ozkj.streamlit.app/).
+Visit, the web app [here](https://noteftp.streamlit.app/).
 
 ## License
 This project has been licensed with GNU GPLv3.
